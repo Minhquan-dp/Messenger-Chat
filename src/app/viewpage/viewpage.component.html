@@ -1,0 +1,176 @@
+<!--Phan ben trai, left-->
+<!--list user personal-->
+<script src="listuser.service.ts"></script>
+<div id="frame">
+  <div id="sidepanel" class="float-styles">
+    <div id="profile">
+
+      <div class="wrap">
+        <img class="normal" id="profile-img" src="https://cdn-icons-png.flaticon.com/512/660/660611.png" class="online" alt="" />
+
+        <p style="font-size: 18px">{{username}}</p>
+        <p style="color:rgb(170, 253, 170); font-size: 15px">Online</p>
+      </div>
+    </div>
+<!-- -->
+
+    <div class="searching-bar flex container">
+      <div class="row">
+        <input class="col-9 input--border" type="text"  placeholder="Enter name to search" />
+        <button class="col-3 submit--btn" type="submit " >
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- -->
+    <div id="slideMenu">
+      <button id="peopleChat" style="width: 80px; border-radius: 15px;" class="backgroundActive" (click)="selectPeopleChat()"><i class="fa fa-user"></i>
+        People</button>
+      <button id="groupChat" style="width: 80px; border-radius: 15px;" class="backgroundNoActive" (click)="selectGroupChat()"><i class="fa fa-users"></i>
+        Group</button>
+<!--      <button id="peopleChat1" style="width: 70px; border-radius: 15px;" class="backgroundActive" ><i class="fas fa-list"></i>-->
+<!--       List </button>-->
+<!--      <button id="groupChat1" style="width: 70px; border-radius: 15px;"  class="backgroundNoActive"><i class="fas fa-cog "></i>-->
+<!--        Set </button>-->
+
+
+
+    </div>
+
+    <!--    search á-->
+    <div id="peopleList">
+      <div id="addContact">
+        <form #addUser="ngForm" (ngSubmit)="addPeopleContact(addUser)">
+          <input placeholder="add a new contact" name="username" autocomplete="off" ngModel />
+          <button style="margin-left: 2px;border-radius: 27px;">+</button>
+        </form>
+      </div>
+
+
+
+      <div id="contacts">
+        <ul>
+          <li class="contact" *ngFor="let u of listUser" (click)="selectUser(u)">
+            <img class="normal" src="https://cdn-icons-png.flaticon.com/512/660/660611.png" />
+            <p class="name">{{u}}</p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+
+    <div id="groupList" style="display: none">
+      <div id="groupFunction">
+        <div class="createGroup">
+          <p>Create Group</p>
+          <form #createGroupForm="ngForm" (ngSubmit)="createGroup(createGroupForm)">
+            <input placeholder="Add a new group" name="nameGroup" autocomplete="off" ngModel />
+            <button type="submit">Create</button>
+          </form>
+        </div>
+
+        <div class="joinGroup">
+          <p>Join Group</p>
+          <form #joinGroupForm="ngForm" (ngSubmit)="joinGroup(joinGroupForm)">
+            <input placeholder="Enter a group" name="nameGroup" autocomplete="off" ngModel />
+            <button type="submit"><i class="fa fa-arrow-right"
+                                     aria-hidden="true"></i></button>
+          </form>
+        </div>
+
+      </div>
+
+      <div id="contacts1">
+        <ul>
+          <li class="contact" *ngFor="let group of listGroup" (click)="selectGroup(group)">
+            <img class="normal" src="https://flaticons.net/icon.php?slug_category=people&slug_icon=user-group" />
+            <p class="name">{{group}}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="bottom-bar" style="width: 50px"style="width: 100%;">
+
+      <button href="login-form-20/index.html" id="settings" (click)="onLogout()"><i class="fa fa-arrow-left"
+                                                                                    aria-hidden="true"></i>
+        <span> LOGOUT</span>
+      </button>
+    </div>
+  </div>
+
+  <!--Phan chinh chat area-->
+
+  <div class="content float-styles">
+    <div class="contact-profile">
+      <img class="normal" src="https://cdn-icons-png.flaticon.com/512/660/660611.png" alt="" />
+      <div>
+        <p class="author">{{author}}</p>
+        <p class="status">{{status}}</p>
+      </div>
+    </div>
+    <!--gui tin nhan-->
+    <div class="messages" id="messages" #scrollBottom>
+      <ul *ngFor="let message of listMessage">
+
+        <li class="sent" *ngIf="message.type == 'sent'">
+          <img class="normal" src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png" alt="" />
+          <p class="authorChat">{{message.name}} </p>
+          <pre>{{message.mes}}</pre>
+          <p class="timeChat">{{message.time}}</p>
+          <img class="normal" *ngIf="message.attachment"
+               class="image-attachment"
+               src="{{ message.attachment.link }}"
+               alt="{{ message.attachment.name }}"
+          />
+        </li>
+
+        <li class="replies" *ngIf="message.type == 'reply'">
+          <img class="normal" rc="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png" alt="" />
+          <div>
+            <p class="authorChat">{{message.name}}</p>
+            <pre class="messageChat">{{message.mes}}</pre><br />
+            <p class="timeChat">{{message.time}}</p>
+            <img class="normal" *ngIf="message.attachment"
+                 class="image-attachment"
+                 src="{{ message.attachment.link }}"
+                 alt="{{ message.attachment.name }}"
+            />
+          </div>
+        </li>
+
+<!--        &lt;!&ndash;  <emoji-mart class="emoji-mart" (emojiSelect)="addEmoji($event)"  *ngIf="showEmojiPicker" [i18n]="{ search: 'Research', categories: { search: 'No research', recent: 'Researches' } }" title="Pick your emoji…"></emoji-mart> &ndash;&gt;-->
+<!--          <div *ngIf="showGiphySearch" class="giphy-search">-->
+<!--            <form (ngSubmit)="searchGiphy()">-->
+<!--              <input type="text" placeholder="Search for a GIF" name="giphy" [(ngModel)]="giphySearchTerm">-->
+<!--            </form>-->
+<!--            <ul class="search-results">-->
+<!--              <li class="gif-result" *ngFor="let result of giphyResults">-->
+<!--                <img class="imageGiphy" src="{{ result.images.downsized_large.url }}"-->
+<!--                     (click)="sendGif(result.title, result.images.original.url)">-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </div>-->
+        </ul>
+
+      </div>
+
+      <div class="message-input">
+        <form class="wrap" #formMessage="ngForm" (ngSubmit)="sendMessage(formMessage)">
+          <input id="messageInput" name="message" type="text" placeholder="Write your message..." autocomplete="off" [(ngModel)]="message" />
+          <button type="button" class="toggle-emoji" (click)="toggleEmojiPicker()">
+            <i name="smile"></i>
+          </button>
+          <h6> SEND</h6>
+<!--          <button type="button" class="toggle-giphy"-->
+<!--                  (click)="toggleGiphySearch()">GIF</button>-->
+          <button type="submit" class="submit"><i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i></button>
+        </form>
+      </div>
+
+    </div>
+
+
+  </div>
